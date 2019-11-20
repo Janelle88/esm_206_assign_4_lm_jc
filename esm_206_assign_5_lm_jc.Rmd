@@ -1,0 +1,20 @@
+---
+title: "Salamanders"
+author: "Janelle Christensen & Lauren Manzo"
+date: "11/20/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(janitor)
+```
+
+```{r}
+
+salamander_df <- read_csv("mack_creek_vertebrates.csv") %>% 
+  clean_names()
+
+```
+
