@@ -13,11 +13,66 @@ library(janitor)
 
 ```{r}
 
+# ------------
+# Read in csv file
+# ------------
+
 salamander_df <- read_csv("mack_creek_vertebrates.csv") %>% 
   clean_names()
 
 ```
 
+### Introduction
 
-Citation
+### Data and Methods
+
+### Results
+
+#### A
+
+Visually compare annual salamander counts in old growth (OG) and clear cut (CC) sections of Mack Creek.
+
+```{r}
+
+```
+
+#### B
+
+Table of 2017 salamander counts by channel classification (pool, cascades and side-channel) in old growth (OG) and clear cut (CC) sections of Mack Creek.
+
+```{r}
+
+```
+
+#### C
+
+Using the 2017 counts found in Results B above, answer: is there a significant difference in where in the channel Pacific giant salamanders are located (pool, cascade or side channel) between the two sections (old growth and clear cut)?
+
+```{r}
+
+```
+
+#### D
+
+Compare weights of Pacific giant salamanders in clear cut and old growth forest sections of the creek in 2017.
+
+```{r}
+
+```
+
+#### E
+
+Compare weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
+
+```{r}
+
+```
+
+
+### Summary
+
+- Bullet points
+
+### References
+
 ^1^Gregory S. V. 2016. Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest, 1987 to present. Environmental Data Initiative. https://doi.org/10.6073/pasta/5de64af9c11579266ef20da2ff32f702. Dataset accessed 11/19/2019.
