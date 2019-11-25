@@ -18,3 +18,6 @@ salamander_df <- read_csv("mack_creek_vertebrates.csv") %>%
 
 ```
 
+
+Citation
+^1^Gregory S. V. 2016. Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest, 1987 to present. Environmental Data Initiative. https://doi.org/10.6073/pasta/5de64af9c11579266ef20da2ff32f702. Dataset accessed 11/19/2019.
