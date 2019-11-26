@@ -32,6 +32,9 @@ salamander_df <- read_csv("mack_creek_vertebrates.csv") %>%
 
 Visually compare annual salamander counts in old growth (OG) and clear cut (CC) sections of Mack Creek.
 
+To do:
+- finalized graph is a line graph
+
 ```{r}
 
 ```
@@ -56,6 +59,10 @@ Using the 2017 counts found in Results B above, answer: is there a significant d
 
 Compare weights of Pacific giant salamanders in clear cut and old growth forest sections of the creek in 2017.
 
+To do:
+- Histogram
+- qqplot
+
 ```{r}
 
 ```
@@ -63,6 +70,11 @@ Compare weights of Pacific giant salamanders in clear cut and old growth forest 
 #### E
 
 Compare weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
+
+To do:
+- Exclude from final data, but visually explore
+  - Histogram
+  - qqplot
 
 ```{r}
 
