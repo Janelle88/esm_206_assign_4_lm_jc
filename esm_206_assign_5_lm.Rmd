@@ -1,0 +1,15 @@
+---
+title: "esm_206_assign_5_lm"
+author: "Lauren Manzo"
+date: "11/25/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Credit: [Jeffrey Marsten Wikimedia](https://commons.wikimedia.org/wiki/File:Dicamptodon_tenebrosus_2.JPG)
+
+Graph A:
+
