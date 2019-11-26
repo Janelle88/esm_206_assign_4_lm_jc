@@ -1,5 +1,5 @@
 ---
-title: "Le Salamander est bon"
+title: "La salamandre est bonne"
 author: "Janelle Christensen & Lauren Manzo"
 date: "11/20/2019"
 output: html_document
