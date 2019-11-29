@@ -12,4 +12,63 @@ knitr::opts_chunk$set(echo = TRUE)
 Credit: [Jeffrey Marsten Wikimedia](https://commons.wikimedia.org/wiki/File:Dicamptodon_tenebrosus_2.JPG)
 
 Graph A:
+```{r}
+# --------------------
+# Create Graph A data.
+# --------------------
+
+salamander_count <- salamander_df %>% 
+# Call the data and assign it to an object.
+# Pipe to move to the next step.
+  group_by(section, year) %>% 
+# Group receiving section and year by collapsing 
+# multiple data points into a single row,
+# based on what is summarized in the next step.
+# Pipe to move to the next step.
+  select(section, year, entity) %>% 
+# Select specific columns to keep in the data frame.
+  summarize("total" = sum(entity)) %>% 
+# Summarize (new column = whatever you're doing(metric)).
+    mutate("section_name" = ifelse(section == "OG", "old growth",
+                              ifelse(section == "CC", "clear cut")))
+# Create a new column containing non-abbreviated section names.
+  
+```
+
+```{r}
+# ---------------
+# Create Graph A.
+# ---------------
+
+ggplot(data = salamander_count, aes(x = year, y = total, group = section)) + 
+# Create a graph and call out data to be used,
+# including what the x and y variables are.
+# To create individual lines by section, need group = section.
+  geom_line(aes(color = section_name), size = 1.2) +
+# Color lines by section and specify line size.
+  labs(color = "Sections of Mack Creek",
+       x = "Year",
+       y = "Annual salamander counts") + 
+# Use color to create the legend title and create 
+# labels for the x and y axes and title.
+  theme_light() +
+# Call out a theme to tweak the display of an existing theme.
+  geom_dl(aes(label = section_name), 
+          method = list(dl.combine("last.points"), 
+                        cex = .8)) + 
+# Use geom_dl for direct labels on the lines, cex is font size, 
+# method needs to be written like this.
+  theme(legend.position = c(0.19, 0.837)) + 
+# Manually reposition legend.
+  scale_x_continuous(expand = c(0,0),
+                     limits = c(1993,2025)) + 
+# Needed to expand limits for years.
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0, 550)) +
+# Needed to expand limits for section counts.
+  scale_color_manual(breaks = c("old growth", "clear cut"), values = c("darkseagreen3", "darkslategray")) 
+# Manually change line colors in graph based on 
+# whether a section is old growth or clear cut.
+
+```
 
