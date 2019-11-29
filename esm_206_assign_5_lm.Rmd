@@ -8,7 +8,11 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
+Figure 1. Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest
+![Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest](map.png)
+Credit: [EDI Data Portal](https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-and&identifier=4027&revision=12)
+Figure 2. Pacific Giant Salamander
+![Pacific Giant Salamander](pacificgiantsalamader.jpg)
 Credit: [Jeffrey Marsten Wikimedia](https://commons.wikimedia.org/wiki/File:Dicamptodon_tenebrosus_2.JPG)
 
 Graph A:
@@ -35,7 +39,7 @@ salamander_count <- salamander_df %>%
   
 ```
 
-```{r}
+```{r, fig.cap="Figure 3: Annual salamander counts observed from 1993 - 2017 in two sections of Mack Creek that were either old growth (dark green) or clear cut Protected Areas (golden yellow) in the Andrews Experimental Forest. Data: Andrews Forest LTER"}
 # ---------------
 # Create Graph A.
 # ---------------
@@ -66,7 +70,7 @@ ggplot(data = salamander_count, aes(x = year, y = total, group = section)) +
   scale_y_continuous(expand = c(0,0),
                      limits = c(0, 550)) +
 # Needed to expand limits for section counts.
-  scale_color_manual(breaks = c("old growth", "clear cut"), values = c("darkseagreen3", "darkslategray")) 
+  scale_color_manual(breaks = c("old growth", "clear cut"), values = c("sandybrown", "darkslategray")) 
 # Manually change line colors in graph based on 
 # whether a section is old growth or clear cut.
 
