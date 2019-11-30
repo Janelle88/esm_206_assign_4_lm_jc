@@ -137,7 +137,9 @@ channel_class_df <- salamander_df %>%
 
 channel_class_table <- channel_class_df %>% 
   pivot_wider(names_from = section,
-              values_from = n) %>%
+              values_from = n) 
+
+channel_class_table_props <- channel_class_table %>%
   #pivot wider to make a contingency table, long format bad for this
   adorn_percentages(denominator = "row") %>% 
   # denominator = row to get pct on row
@@ -146,7 +148,7 @@ channel_class_table <- channel_class_df %>%
   adorn_ns(position = "front")
 # numbers in front of percentages
 
-channel_class_table %>% 
+channel_class_table_props %>% 
   kable(col.names = c("Area of Creek",
                       "Clear Cut", 
                       "Old Growth")) %>% 
