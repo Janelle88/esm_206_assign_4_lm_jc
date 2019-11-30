@@ -177,7 +177,7 @@ salamander_weight_av <- salamander_weight %>%
 
 ```
 
-```{r, fig.cap="Figure 6: Salamander weight in old growth and clear cut Areas in Mack Creek in 2017 and kernal density for mean salamandar weight in Marine Protected Areas in 2012 (dark blue) and 2018 (light blue) and Non-Marine Protected Areas in 2012 (dark orange) and 2018 (light orange). The means are shown as dashed lines. Data: SBC LTER"}
+```{r, fig.cap="Figure 6: Salamander weight in old growth and clear cut areas in Mack Creek in 2017 and kernal density for mean salamandar weight in old growth areas (dark green) and in clear cut areas (light green) in 2017. The means are shown as dashed lines. Data: Andrews Forest LTER"}
 # ---------------
 # Create Graph D 
 # ---------------
@@ -262,7 +262,7 @@ color = "darkslategray") +
 # Means taken from lobster_size_av dataframe.
 # Using vline allows me to draw a vertical line of the mean.
   labs(x = "Salamander weight (grams)",
-       y = "Kernel Density")
+       y = "Kernel density")
 # Create labels for the x and y axes and title.
 # Create caption below the graph and edit font size and style.
 
