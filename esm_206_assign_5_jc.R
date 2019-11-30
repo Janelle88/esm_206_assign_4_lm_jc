@@ -34,7 +34,9 @@ channel_class_df <- salamander_df %>%
 
 channel_class_table <- channel_class_df %>% 
   pivot_wider(names_from = section,
-              values_from = n) %>%
+              values_from = n) 
+
+channel_class_table_props <- channel_class_table %>%
   #pivot wider to make a contingency table, long format bad for this
   adorn_percentages(denominator = "row") %>% 
   # denominator = row to get pct on row
@@ -43,7 +45,7 @@ channel_class_table <- channel_class_df %>%
   adorn_ns(position = "front")
 # numbers in front of percentages
 
-channel_class_table %>% 
+channel_class_table_props %>% 
   kable(col.names = c("Area of Creek",
                       "Clear Cut", 
                       "Old Growth")) %>% 
@@ -56,3 +58,34 @@ channel_class_table %>%
                    line = TRUE, 
                    c("Salamanders Observed in Mack Creek" = 3))
 # header number has to match number of columns
+
+# -----
+# Results C
+# chi-squared
+# -----
+
+# Using the 2017 counts found in Results B above, answer: is there a significant difference in where in the channel Pacific giant salamanders are located (pool, cascade or side channel) between the two sections (old growth and clear cut)?
+
+# Is there an association between where PGS live in the channel and what type of forest it is?
+
+# H0: There is no association in where in the channel PGS are located b/w the two sections (CC vs. OG)
+# HA: There is an association in where in the channel PGS are located b/w the two sections (CC vs. OG)
+# Chi-squared test 
+
+channel_class_table_chi <- channel_class_table %>% 
+  select(-creek_area)
+
+channel_class_chi <- chisq.test(channel_class_table_chi)
+
+
+# ----
+# Results E
+# ----
+
+
+# Compare weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
+
+#To do:
+#  - Exclude from final data, but visually explore
+#- Histogram
+#- qqplot
