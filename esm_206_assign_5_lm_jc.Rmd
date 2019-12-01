@@ -134,7 +134,7 @@ channel_class_df <- salamander_df %>%
   #filter data for only Clear Cut and Old Growth
   filter(unittype %in% c("C", "SC", "P")) %>%
   #filter for only pools, side channels and channel
-  mutate("creek_area" = ifelse(unittype == "C", "Channel",
+  mutate("creek_area" = ifelse(unittype == "C", "Cascade",
                         ifelse(unittype == "SC", "Side-Channel", "Pool"))) %>%
   # make names nicer for table
   count(section, creek_area)
@@ -338,7 +338,7 @@ creek_area_weight <- salamander_df %>%
   # Pipe to move to the next step.
   select(year, unittype, weight) %>%
   # Select specific columns to keep in the data frame.
-  mutate("creek_area" = ifelse(unittype == "C", "Channel",
+  mutate("creek_area" = ifelse(unittype == "C", "Cascade",
                                  ifelse(unittype == "P", "Pool", "Side-Channel")))
 # Compare weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
 
@@ -389,14 +389,14 @@ ggplot(data = creek_area_weight) +
                color = as.character(creek_area)),
                alpha = 0.3) +
   # Using as.character allows me to group them by year.
-  scale_fill_manual(breaks = c("Channel", 
+  scale_fill_manual(breaks = c("Cascade", 
                                "Pool",
                                "Side-Channel"), 
                     values = c("darkseagreen3", 
                                "darkslategray",
                                "lightsalmon")) +
   # Specify colors for the fill of the curves.
-  scale_color_manual(breaks = c("Channel", 
+  scale_color_manual(breaks = c("Cascade", 
                                 "Pool",
                                 "Side-Channel"), 
                      values = c("darkseagreen3", 
@@ -451,7 +451,7 @@ ggplot(data = creek_area_weight) +
            # Where my label will sit.
            y = 0.045,
            # Where my label will sit.
-           label = "Channel",
+           label = "Cascade",
            hjust = "left",
            color = "darkseagreen3") +
   # Annotation for Channel.
