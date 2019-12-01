@@ -56,6 +56,7 @@ Figure 1. Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimenta
 ![Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest](map.png)
 Credit: [EDI Data Portal](https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-and&identifier=4027&revision=12)
 
+
 Figure 2. Pacific Giant Salamander
 ![Pacific Giant Salamander](pacificgiantsalamader.jpg)
 Credit: [Jeffrey Marsten Wikimedia](https://commons.wikimedia.org/wiki/File:Dicamptodon_tenebrosus_2.JPG)
