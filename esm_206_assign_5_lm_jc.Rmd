@@ -263,6 +263,8 @@ ggplot(data = salamander_weight, aes(sample = weight)) +
   facet_wrap(~section_name, scales = "free")
 # Compare graphs side by side.
 
+# means are not normally distributed, they are positively skewed, but because of central tendency theorem and our large sample size, we can still compare means
+
 
 ```
 
@@ -358,6 +360,26 @@ color = "darkslategray") +
 
 
 ```
+
+```{r}
+# ----------
+# ttest for this data
+# ----------
+
+# need to filter data to new df's
+
+og_salamander <- salamander_weight %>% 
+  filter(section %in% c("OG"))
+
+cc_salamander <- salamander_weight %>% 
+  filter(section %in% c("CC"))
+
+og_cc_ttest <- t.test(og_salamander$weight, cc_salamander$weight)
+
+
+
+```
+
 
 ##### 4. Compared weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
 

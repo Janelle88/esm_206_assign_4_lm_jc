@@ -97,20 +97,25 @@ creek_area_weight <- salamander_df %>%
   # Pipe to move to the next step.
   select(year, unittype, weight) %>%
   # Select specific columns to keep in the data frame.
-  mutate("creek_area" = ifelse(unittype == "C", "Channel",
+  mutate("creek_area" = ifelse(unittype == "C", "Cascade",
                                  ifelse(unittype == "P", "Pool", "Side-Channel")))
 # Compare weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
 
-creek_area_weight_av <- creek_area_weight %>% 
+creek_area_summary <- creek_area_weight %>% 
   #Call out data and assign it to an object.
   #Pipe to move to the next step.
   group_by(unittype, year) %>%
   # Group receiving section and year by collapsing
   # multiple data points into a single row.
   # Pipe to move to the next step.
-  summarize(weight_av = mean(weight, na.rm = TRUE)) %>% 
+  summarize(weight_av = mean(weight, na.rm = TRUE),
+            weight_sd = sd(weight, na.rm = TRUE),
+            sample_size = n(),
+            weight_se = sd(weight, na.rm = TRUE) / sqrt(n())) %>% 
   # Summarize (new column = whatever you're doing(metric)).
-  filter(year %in% c(2017))
+  filter(year %in% c(2017)) %>% 
+  mutate("creek_area" = ifelse(unittype == "C", "Cascade",
+                               ifelse(unittype == "P", "Pool", "Side-Channel")))
 # Filter out the observations during the year 2017.
 
 # visually explore the data to see if means are normally distributed
@@ -119,7 +124,8 @@ ggplot() +
   geom_jitter(data = creek_area_weight, 
               aes(x = creek_area, 
                   y = weight,
-                  color = creek_area)) +
+                  color = creek_area),
+              alpha = 0.2) +
   scale_color_manual(breaks = c("Cascade", 
                                 "Pool",
                                 "Side-Channel"), 
@@ -130,9 +136,22 @@ ggplot() +
   theme_minimal() +
   # Call out a theme to tweak the display of an existing theme.
   theme(legend.position = "none") +
-geom_point(data = creek_area_weight_av,
-           aes(x = weight_av,
-               y = creek_area))
+  geom_point(data = creek_area_summary,
+           aes(x = creek_area,
+               y = weight_av),
+           color = "red",
+           size = 2) +
+  geom_errorbar(data = creek_area_summary,
+                aes(x = creek_area,
+                    ymin = weight_av - weight_av, 
+                    #minus weight_av b/c weight can't be below zero
+                    ymax = weight_av + weight_sd),
+                width = 0.1, 
+                color = "red") 
+
+# ----------
+# density plot
+# ----------
 
 ggplot(data = creek_area_weight) +
   geom_density(aes(x = weight,
