@@ -42,7 +42,12 @@ salamander_df <- read_csv("mack_creek_vertebrates.csv") %>%
 
 ### Introduction
 
-...
+
+The pacific giant salamanders (*dicamptodon tenebrosus*) are a native species and the largest amphibians known in Oregon. Observing these species can give a clear signal on whether their water habitat is healthy as they are sensitive to water quality and are the first animals to react to negative impacts on their aquatic environment.
+
+Since 1987 to present day, the Andrews Forest Long Term Ecological Research (Andrews Forest LTER) has been observing pacific giant salamanders as part of an aquatic vertebrate population study. The research team conducted their work in Mack Creek located in the Andrews Experimental Forest in Oregon. The research team has been focusing on two specific areas of the creek; an upstream 500 year old coniferous forest and a clearcut forest.
+
+
 
 Figure 1. Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest
 ![Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest](map.png)
@@ -57,6 +62,8 @@ Credit: [Jeffrey Marsten Wikimedia](https://commons.wikimedia.org/wiki/File:Dica
 ### Results
 
 ##### 1. Observed annual salamander counts in old growth and clear cut sections of Mack Creek
+
+In the two creek areas, annual salamander counts followed a similar trend.
 
 ```{r}
 # --------------------
@@ -119,11 +126,9 @@ ggplot(data = salamander_count, aes(x = year, y = total, group = section)) +
 
 ```
 
-#### B
+##### 2. Table of 2017 salamander counts by channel classification (pool, cascades and side-channel) in old growth (OG) and clear cut (CC) sections of Mack Creek.
 
-Table of 2017 salamander counts by channel classification (pool, cascades and side-channel) in old growth (OG) and clear cut (CC) sections of Mack Creek.
-
-```{r}
+```{r, fig.cap="Figure 4: ... Data: Andrews Forest LTER"}
 channel_class_df <- salamander_df %>% 
   filter(section %in% c("CC", "OG")) %>% 
   #filter data for only Clear Cut and Old Growth
@@ -163,21 +168,13 @@ channel_class_table_props %>%
 # header number has to match number of columns
 ```
 
-#### C
-
 Using the 2017 counts found in Results B above, answer: is there a significant difference in where in the channel Pacific giant salamanders are located (pool, cascade or side channel) between the two sections (old growth and clear cut)?
 
-```{r}
+```{r, fig.cap="Figure 5: ... Data: Andrews Forest LTER"}
 
 ```
 
-#### D
-
-Compare weights of Pacific giant salamanders in clear cut and old growth forest sections of the creek in 2017.
-
-To do:
-- Histogram
-- qqplot
+##### 3. Compared weights of Pacific giant salamanders in clear cut and old growth forest sections of Mack creek in 2017.
 
 ```{r}
 # --------------------
@@ -305,24 +302,27 @@ color = "darkslategray") +
 
 ```
 
-#### E
-
-Compare weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
+##### 4. Compared weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
 
 To do:
 - Exclude from final data, but visually explore
   - Histogram
   - qqplot
 
-```{r}
+```{r, fig.cap="Figure 7: ... Data: Andrews Forest LTER"}
 
 ```
 
 
-### Summary
+#### Summary
 
 - Bullet points
+-
+-
+-
 
-### References
+#### References
 
-^1^Gregory S. V. 2016. Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest, 1987 to present. Environmental Data Initiative. https://doi.org/10.6073/pasta/5de64af9c11579266ef20da2ff32f702. Dataset accessed 11/19/2019.
+**Gregory S. V. 2016.** Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest, 1987 to present. Environmental Data Initiative. https://doi.org/10.6073/pasta/5de64af9c11579266ef20da2ff32f702. Dataset accessed 11/19/2019.
+
+“Pacific Giant Salamander: Oregon Wild.” Pacific Giant Salamander | Oregon Wild, oregonwild.org/wildlife/pacific-giant-salamander.
