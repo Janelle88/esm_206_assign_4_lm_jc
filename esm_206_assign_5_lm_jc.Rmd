@@ -46,7 +46,9 @@ salamander_df <- read_csv("mack_creek_vertebrates.csv") %>%
 
 The pacific giant salamanders (*dicamptodon tenebrosus*) are a native species and the largest amphibians known in Oregon. Observing these species can give a clear signal on whether their water habitat is healthy as they are sensitive to water quality and are the first animals to react to negative impacts on their aquatic environment.
 
-Since 1987 to present day, the Andrews Forest Long Term Ecological Research (Andrews Forest LTER) has been observing pacific giant salamanders as part of an aquatic vertebrate population study. The research team conducted their work in Mack Creek located in the Andrews Experimental Forest in Oregon. The research team has been focusing on two specific areas of the creek; an upstream 500 year old coniferous forest and a clearcut forest.
+Since 1987 to present day, the Andrews Forest Long Term Ecological Research (Andrews Forest LTER) has been observing pacific giant salamanders as part of an aquatic vertebrate population study. The overall purpose of the study has been to observe the impacts of land use on the aquatic vertebrates. The research team conducted their work in Mack Creek located in the Andrews Experimental Forest in Oregon. The research team has been focusing on two specific areas of the creek; an upstream 500 year old coniferous forest and a clearcut forest.
+
+Andrews Forest Long Term Ecological Reasearch has been using 2-pass electrofishing to capture specimen from the two regions of Mack Creek and measure and weigh each one for their records.
 
 
 
@@ -59,6 +61,8 @@ Figure 2. Pacific Giant Salamander
 Credit: [Jeffrey Marsten Wikimedia](https://commons.wikimedia.org/wiki/File:Dicamptodon_tenebrosus_2.JPG)
 
 ### Data and Methods
+
+Data for this project was collected from 1987 to present day by the Andrews Forest Long Term Ecological Research team. Salamander counts, measurements, and weights were annually collected at two 150 meter sections (clear cut and old growth) of Mack Creek. The two 150 meter sections were partinioned off in three 50 meter reaches by nets. Each 50 meter reach was then sampled with 2-pass electrofishing. Salamander trends in clear cut areas of Mack Creek were compared with salamander trends in old growth areas of Mack Creek. All data was analyzed and put into figures through the software R version 3.6.1.
 
 ### Results
 
@@ -227,6 +231,41 @@ salamander_weight_av <- salamander_weight %>%
 
 ```
 
+```{r}
+# ----------------------
+# Visually explore data
+# ----------------------
+
+# Faceted histogram: 
+ggplot(data = salamander_weight, aes(x = weight)) +
+  geom_histogram(aes(fill = section_name),
+# Create a graph and call out data to be used,
+# including what the x variable is.
+                 alpha = 0.5,
+# Edit transparency.
+                 show.legend = FALSE,
+# Remove legend.
+                 bins = 15) +
+  facet_wrap(~section_name, scales = "free")
+# Compare graphs side by side.
+
+
+# Faceted QQ plots: 
+ggplot(data = salamander_weight, aes(sample = weight)) +
+  geom_qq(aes(color = section_name),
+# Create a graph and call out data to be used,
+# including what the x variable is.
+                 alpha = 0.5,
+# Edit transparency.          
+                 show.legend = FALSE) +
+# Remove legend.
+  facet_wrap(~section_name, scales = "free")
+# Compare graphs side by side.
+
+
+```
+
+
 ```{r, fig.cap="Figure 6: Salamander weight in old growth and clear cut areas in Mack Creek in 2017 and kernal density for mean salamandar weight in old growth areas (dark green) and in clear cut areas (light green) in 2017. The means are shown as dashed lines. Data: Andrews Forest LTER"}
 # ---------------
 # Create Graph D 
@@ -273,7 +312,7 @@ ggplot(data = salamander_weight, aes(x = weight,
 # Where my text will be.
             y = .113,
 # Where my text will be.
-           label = "clear cut",
+           label = "Clear cut",
            hjust = "left",
            color = "darkseagreen3") +
 # Annotation for 2018.
@@ -297,7 +336,7 @@ ggplot(data = salamander_weight, aes(x = weight,
 # Where my label will sit.
             y = 0.045,
 # Where my label will sit.
-            label = "old growth",
+            label = "Old growth",
             hjust = "left",
 color = "darkslategray") +
 # Annotation for 2012.
@@ -563,5 +602,7 @@ salamander_post_hoc
 #### References
 
 **Gregory S. V. 2016.** Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest, 1987 to present. Environmental Data Initiative. https://doi.org/10.6073/pasta/5de64af9c11579266ef20da2ff32f702. Dataset accessed 11/19/2019.
+
+“Andrews Forest Data Web Site.” Andrews Forest, andlter.forestry.oregonstate.edu/data/abstractdetail.aspx?dbcode=AS006.
 
 “Pacific Giant Salamander: Oregon Wild.” Pacific Giant Salamander | Oregon Wild, oregonwild.org/wildlife/pacific-giant-salamander.
