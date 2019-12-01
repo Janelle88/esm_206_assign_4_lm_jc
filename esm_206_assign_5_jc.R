@@ -115,6 +115,25 @@ creek_area_weight_av <- creek_area_weight %>%
 
 # visually explore the data to see if means are normally distributed
 
+ggplot() +
+  geom_jitter(data = creek_area_weight, 
+              aes(x = creek_area, 
+                  y = weight,
+                  color = creek_area)) +
+  scale_color_manual(breaks = c("Cascade", 
+                                "Pool",
+                                "Side-Channel"), 
+                     values = c("darkseagreen3", 
+                                "darkslategray",
+                                "lightsalmon")) +
+  # Specify colors for the points.
+  theme_minimal() +
+  # Call out a theme to tweak the display of an existing theme.
+  theme(legend.position = "none") +
+geom_point(data = creek_area_weight_av,
+           aes(x = weight_av,
+               y = creek_area))
+
 ggplot(data = creek_area_weight) +
   geom_density(aes(x = weight,
                # Create a graph and call out data to be used,
