@@ -19,6 +19,7 @@ library(plotly)
 library(gridExtra)
 library(grid)
 library(effsize)
+library(car)
 
 ```
 
@@ -355,7 +356,11 @@ creek_area_weight_av <- creek_area_weight %>%
   # Pipe to move to the next step.
   summarize(weight_av = mean(weight, na.rm = TRUE)) %>% 
   # Summarize (new column = whatever you're doing(metric)).
-  filter(year %in% c(2017))
+  filter(year %in% c(2017)) %>% 
+  mutate("creek_area" = ifelse(unittype == "C", "Cascade",
+                                 ifelse(unittype == "P",
+                                        "Pool",
+                                        "Side-Channel")))
 # Filter out the observations during the year 2017.
 ```
 
@@ -380,6 +385,25 @@ ggplot(data = creek_area_weight, aes(sample = weight)) +
 # ---------
 # Graph E
 # --------
+
+ggplot(data = creek_area_weight, 
+       aes(x = creek_area, 
+           y = weight,
+           color = creek_area)) +
+  geom_jitter() +
+   scale_color_manual(breaks = c("Cascade", 
+                               "Pool",
+                               "Side-Channel"), 
+                    values = c("darkseagreen3", 
+                               "darkslategray",
+                               "lightsalmon")) +
+  # Specify colors for the points.
+  theme_minimal() +
+  # Call out a theme to tweak the display of an existing theme.
+  theme(legend.position = "none") 
+  # geom_point(data = creek_area_weight_av,
+  #            aes(x = weight_av,
+  #                y = creek_area))
 
 ggplot(data = creek_area_weight) +
   geom_density(aes(x = weight,
