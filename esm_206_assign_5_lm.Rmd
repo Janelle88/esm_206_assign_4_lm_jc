@@ -76,3 +76,26 @@ ggplot(data = salamander_count, aes(x = year, y = total, group = section)) +
 
 ```
 
+```{r}
+# Result E:
+
+ggplot() +
+  geom_jitter(data = creek_area_weight, 
+              aes(x = creek_area, 
+                  y = weight,
+                  color = creek_area)) +
+  scale_color_manual(breaks = c("Cascade", 
+                                "Pool",
+                                "Side-Channel"), 
+                     values = c("darkseagreen3", 
+                                "darkslategray",
+                                "lightsalmon")) +
+  # Specify colors for the points.
+  theme_minimal() +
+  # Call out a theme to tweak the display of an existing theme.
+  theme(legend.position = "none") +
+geom_point(data = creek_area_weight_av,
+           aes(x = weight_av,
+               y = unittype))
+```
+
