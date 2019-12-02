@@ -83,19 +83,38 @@ ggplot() +
   geom_jitter(data = creek_area_weight, 
               aes(x = creek_area, 
                   y = weight,
-                  color = creek_area)) +
+# Create a graph and call out data to be used,
+# including what the x and y variables are.
+                  color = creek_area),
+# Color jitterplot by creek area.
+              alpha = 0.5) +
+# Adjust transparency.
   scale_color_manual(breaks = c("Cascade", 
                                 "Pool",
                                 "Side-Channel"), 
-                     values = c("darkseagreen3", 
-                                "darkslategray",
-                                "lightsalmon")) +
-  # Specify colors for the points.
+                     values = c("darkturquoise", 
+                                "deepskyblue3",
+                                "cornflowerblue")) +
+# Specify colors for the points.
   theme_minimal() +
-  # Call out a theme to tweak the display of an existing theme.
+# Call out a theme to tweak the display of an existing theme.
   theme(legend.position = "none") +
-geom_point(data = creek_area_weight_av,
-           aes(x = weight_av,
-               y = unittype))
+  geom_point(data = creek_area_summary,
+           aes(x = creek_area,
+               y = weight_av),
+           color = "black",
+           size = 2) +
+  labs(x = "Creek area",
+       y = "Weight (grams)") +
+# Add salamander weight average points and adjust color and size.
+  geom_errorbar(data = creek_area_summary,
+                aes(x = creek_area,
+                    ymin = weight_av - weight_av, 
+# minus weight_av because weight can't be below zero.
+                    ymax = weight_av + weight_sd),
+                width = 0.15, 
+                color = "black") 
+# Error bar width and color adjustment.
+
 ```
 
