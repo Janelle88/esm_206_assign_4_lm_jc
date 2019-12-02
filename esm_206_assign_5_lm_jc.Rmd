@@ -134,7 +134,8 @@ ggplot(data = salamander_count, aes(x = year, y = total, group = section)) +
 
 ##### 2. Table of 2017 salamander counts by channel classification (pool, cascades and side-channel) in old growth (OG) and clear cut (CC) sections of Mack Creek.
 
-```{r, fig.cap="Figure 4: ... Data: Andrews Forest LTER"}
+Figure 4. Numbers of salamanders observed in cascades, pools and side-channels in clear cut and old growth forest sections along Mack Creek. Percentages are relative to the area of the creek. 
+```{r}
 channel_class_df <- salamander_df %>% 
   filter(section %in% c("CC", "OG")) %>% 
   #filter data for only Clear Cut and Old Growth
@@ -174,9 +175,7 @@ channel_class_table_props %>%
 # header number has to match number of columns
 ```
 
-Using the 2017 counts found in Results B above, answer: is there a significant difference in where in the channel Pacific giant salamanders are located (pool, cascade or side channel) between the two sections (old growth and clear cut)?
-
-```{r, fig.cap="Figure 5: ... Data: Andrews Forest LTER"}
+```{r}
 # -----
 # Results C
 # chi-squared
@@ -194,7 +193,11 @@ channel_class_table_chi <- channel_class_table %>%
   select(-creek_area)
 
 channel_class_chi <- chisq.test(channel_class_table_chi)
+
+p_val_chi <- ifelse(channel_class_chi$p.value < .001, "< 0.001" , channel_class_chi$p.value)
 ```
+
+Based on these results, there is an observed association between where salamanders are found depending on whether or not they are in a clear cut or old growth section of Mack Creek (p `r p_val_chi`)
 
 ##### 3. Compared weights of Pacific giant salamanders in clear cut and old growth forest sections of Mack creek in 2017.
 
@@ -232,7 +235,7 @@ salamander_weight_av <- salamander_weight %>%
 
 ```
 
-```{r}
+```{r, include=FALSE}
 # ----------------------
 # Visually explore data
 # ----------------------
@@ -269,7 +272,7 @@ ggplot(data = salamander_weight, aes(sample = weight)) +
 ```
 
 
-```{r, fig.cap="Figure 6: Salamander weight in old growth and clear cut areas in Mack Creek in 2017 and kernal density for mean salamandar weight in old growth areas (dark green) and in clear cut areas (light green) in 2017. The means are shown as dashed lines. Data: Andrews Forest LTER"}
+```{r, fig.cap="Figure 5: Salamander weight in old growth and clear cut areas in Mack Creek in 2017 and kernal density for mean salamandar weight in old growth areas (dark green) and in clear cut areas (light green) in 2017. The means are shown as dashed lines. Data: Andrews Forest LTER"}
 # ---------------
 # Create Graph D 
 # ---------------
@@ -374,9 +377,28 @@ og_salamander <- salamander_weight %>%
 cc_salamander <- salamander_weight %>% 
   filter(section %in% c("CC"))
 
-og_cc_ttest <- t.test(og_salamander$weight, cc_salamander$weight)
+og_cc_ttest <- t.test(og_salamander$weight, 
+                      cc_salamander$weight, 
+                      na.rm = TRUE)
+
+og_cc_cd <- effsize::cohen.d(og_salamander$weight, 
+                             cc_salamander$weight,
+                             na.rm = TRUE)
+
+#standard deviation
+
+sd_og <- sd(og_salamander$weight, na.rm = TRUE)
+sd_cc <- sd(cc_salamander$weight, na.rm = TRUE)
 
 
+#sample size
+
+sample_og_cc <- sum(salamander_count$total, na.rm = TRUE)
+
+#mean
+
+mean_og <- mean(og_salamander$weight, na.rm = TRUE)
+mean_cc <- mean(cc_salamander$weight, na.rm = TRUE)
 
 ```
 
@@ -442,7 +464,7 @@ ggplot(data = creek_area_weight, aes(sample = weight)) +
 # samples are not normally distributed but we can assume that because of central limit theorem that the means of samples will be
 ```
 
-```{r, fig.cap="Figure 7: ... Data: Andrews Forest LTER"}
+```{r, fig.cap="Figure 6: ... Data: Andrews Forest LTER"}
 
 # ---------
 # Graph E
