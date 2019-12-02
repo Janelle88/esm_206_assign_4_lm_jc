@@ -118,3 +118,143 @@ ggplot() +
 
 ```
 
+```{r}
+#OUTDATED Graph E:
+  
+
+ggplot(data = creek_area_weight, 
+       aes(x = creek_area, 
+           y = weight,
+           color = creek_area)) +
+  geom_jitter() +
+   scale_color_manual(breaks = c("Cascade", 
+                               "Pool",
+                               "Side-Channel"), 
+                    values = c("darkseagreen3", 
+                               "darkslategray",
+                               "lightsalmon")) +
+  # Specify colors for the points.
+  theme_minimal() +
+  # Call out a theme to tweak the display of an existing theme.
+  theme(legend.position = "none") 
+  # geom_point(data = creek_area_weight_av,
+  #            aes(x = weight_av,
+  #                y = creek_area))
+
+ggplot(data = creek_area_weight) +
+  geom_density(aes(x = weight,
+               # Create a graph and call out data to be used,
+               # including what the x variable is.
+               fill = as.character(creek_area),
+               color = as.character(creek_area)),
+               alpha = 0.3) +
+  # Using as.character allows me to group them by year.
+  scale_fill_manual(breaks = c("Cascade", 
+                               "Pool",
+                               "Side-Channel"), 
+                    values = c("darkseagreen3", 
+                               "darkslategray",
+                               "lightsalmon")) +
+  # Specify colors for the fill of the curves.
+  scale_color_manual(breaks = c("Cascade", 
+                                "Pool",
+                                "Side-Channel"), 
+                     values = c("darkseagreen3", 
+                                "darkslategray",
+                                "lightsalmon")) +
+  # Specify colors for the lines.
+  theme_minimal() +
+  # Call out a theme to tweak the display of an existing theme.
+  theme(legend.position = "none") +  
+  # Don't want a legend, label manually.
+  annotate(
+    geom = "curve",
+    # Use geom="curve" for curved line, geom="segment" for straight.
+    x = 3.95,
+    # Line start.
+    y = 0.125,
+    # Line start.
+    xend = 14,
+    # Line end.
+    yend = 0.1155,
+    # Line end.
+    curvature = .2,
+    # Level of curve.
+    color = "lightsalmon") +
+  # Values entered manually for where I want lines to begin and end.
+  annotate(geom = "text",
+           x = 14.55,
+           # Where my text will be.
+           y = .115,
+           # Where my text will be.
+           label = "Side-Channel",
+           hjust = "left",
+           color = "lightsalmon") +
+  # Annotation for Side-Channel.
+  annotate(
+    geom = "curve",
+    # Use geom="curve" for curved line, geom="segment" for straight.
+    x = 12.5,
+    # Start of line.
+    y = 0.03,
+    # Start of line.
+    xend = 25,
+    # End of line.
+    yend = 0.045,
+    # End of line.
+    curvature = .2,
+    # Level of curve.
+    color = "darkseagreen3") +
+  # Values entered manually for where I want the lines to begin and end.
+  annotate(geom = "text",
+           x = 26,
+           # Where my label will sit.
+           y = 0.045,
+           # Where my label will sit.
+           label = "Cascade",
+           hjust = "left",
+           color = "darkseagreen3") +
+  # Annotation for Channel.
+  annotate(
+    geom = "curve",
+    # Use geom="curve" for curved line, geom="segment" for straight.
+    x = 18,
+    # Start of line.
+    y = 0.015,
+    # Start of line.
+    xend = 30,
+    # End of line.
+    yend = 0.025,
+    # End of line.
+    curvature = .2,
+    # Level of curve.
+    color = "darkslategray") +
+  # Values entered manually for where I want the lines to begin and end.
+  annotate(geom = "text",
+           x = 31,
+           # Where my label will sit.
+           y = 0.0255,
+           # Where my label will sit.
+           label = "Pool",
+           hjust = "left",
+           color = "darkslategray") +
+  geom_vline(xintercept = 7.520850,
+             color = "darkseagreen3",
+             linetype = "dashed",
+             size = 0.5) +
+  geom_vline(xintercept = 9.297500,
+             color = "darkslategray",
+             linetype = "dashed",
+             size = 0.5) +
+  geom_vline(xintercept = 5.676646,
+             color = "lightsalmon",
+             linetype = "dashed",
+             size = 0.5) +
+  # Means taken from lobster_size_av dataframe.
+  # Using vline allows me to draw a vertical line of the mean.
+  labs(x = "Salamander weight (grams)",
+       y = "Kernel density")
+  # Create labels for the x and y axes and title.
+  # Create caption below the graph and edit font size and style.
+```
+

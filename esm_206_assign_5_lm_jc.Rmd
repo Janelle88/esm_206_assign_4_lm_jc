@@ -53,12 +53,14 @@ Andrews Forest Long Term Ecological Reasearch has been using 2-pass electrofishi
 
 
 Figure 1. Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest
-![Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest](map.png)
+![Aquatic Vertebrate Population Study in Mack Creek](map.jpg)
+
 Credit: [EDI Data Portal](https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-and&identifier=4027&revision=12)
 
 
 Figure 2. Pacific Giant Salamander
 ![Pacific Giant Salamander](pacificgiantsalamader.jpg)
+
 Credit: [Jeffrey Marsten Wikimedia](https://commons.wikimedia.org/wiki/File:Dicamptodon_tenebrosus_2.JPG)
 
 ### Data and Methods
@@ -132,54 +134,61 @@ ggplot(data = salamander_count, aes(x = year, y = total, group = section)) +
 
 ```
 
+
 ##### 2. Table of 2017 salamander counts by channel classification (pool, cascades and side-channel) in old growth (OG) and clear cut (CC) sections of Mack Creek.
 
 Figure 4. Numbers of salamanders observed in cascades, pools and side-channels in clear cut and old growth forest sections along Mack Creek. Percentages are relative to the area of the creek. 
 ```{r}
+# -------------------------------
+# Create data and results B table 
+# -------------------------------
+
 channel_class_df <- salamander_df %>% 
   filter(section %in% c("CC", "OG")) %>% 
-  #filter data for only Clear Cut and Old Growth
+# Filter data for only Clear Cut and Old Growth.
   filter(unittype %in% c("C", "SC", "P")) %>%
-  #filter for only pools, side channels and channel
+# Filter for only pools, side channels and channel.
   mutate("creek_area" = ifelse(unittype == "C", "Cascade",
                         ifelse(unittype == "SC", "Side-Channel", "Pool"))) %>%
-  # make names nicer for table
+# Make names nicer for table.
   count(section, creek_area)
-# count the data for salamanders in these variables
+# Count the data for salamanders in these variables.
 
 channel_class_table <- channel_class_df %>% 
   pivot_wider(names_from = section,
               values_from = n) 
 
 channel_class_table_props <- channel_class_table %>%
-  #pivot wider to make a contingency table, long format bad for this
+# Pivot wider to make a contingency table, long format bad for this
   adorn_percentages(denominator = "row") %>% 
-  # denominator = row to get pct on row
+# Denominator = row to get pct on row.
   adorn_pct_formatting(digits = 1) %>% 
-  # rounding the decimal places
+# Rounding the decimal places.
   adorn_ns(position = "front")
-# numbers in front of percentages
+# Numbers in front of percentages.
 
 channel_class_table_props %>% 
   kable(col.names = c("Area of Creek",
                       "Clear Cut", 
                       "Old Growth")) %>% 
-  #column names - can't change row names in kable
+# Column names - can't change row names in kable.
   kable_styling(bootstrap_options = "striped",
                 full_width = F,
                 position = "center") %>% 
-  # full width (F), centered table
+# Full width (F), centered table.
   add_header_above(bold = TRUE,
                    line = TRUE, 
                    c("Salamanders Observed in Mack Creek" = 3))
-# header number has to match number of columns
+# Header number has to match number of columns.
+
 ```
 
+
 ```{r}
-# -----
+# ------------
 # Results C
 # chi-squared
-# -----
+# ------------
 
 # Using the 2017 counts found in Results B above, answer: is there a significant difference in where in the channel Pacific giant salamanders are located (pool, cascade or side channel) between the two sections (old growth and clear cut)?
 
@@ -191,13 +200,18 @@ channel_class_table_props %>%
 
 channel_class_table_chi <- channel_class_table %>% 
   select(-creek_area)
+# Create data for chi sq. test.
 
 channel_class_chi <- chisq.test(channel_class_table_chi)
+# Create chi sq. test.
 
 p_val_chi <- ifelse(channel_class_chi$p.value < .001, "< 0.001" , channel_class_chi$p.value)
+# Use ifelse to show p values lower than .001.
+
 ```
 
 Based on these results, there is an observed association between where salamanders are found depending on whether or not they are in a clear cut or old growth section of Mack Creek (p `r p_val_chi`)
+
 
 ##### 3. Compared weights of Pacific giant salamanders in clear cut and old growth forest sections of Mack creek in 2017.
 
@@ -235,7 +249,7 @@ salamander_weight_av <- salamander_weight %>%
 
 ```
 
-```{r, include=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 # ----------------------
 # Visually explore data
 # ----------------------
@@ -266,7 +280,7 @@ ggplot(data = salamander_weight, aes(sample = weight)) +
   facet_wrap(~section_name, scales = "free")
 # Compare graphs side by side.
 
-# means are not normally distributed, they are positively skewed, but because of central tendency theorem and our large sample size, we can still compare means
+# Means are not normally distributed, they are positively skewed, but because of central tendency theorem and our large sample size, we can still compare means.
 
 
 ```
@@ -365,11 +379,11 @@ color = "darkslategray") +
 ```
 
 ```{r}
-# ----------
+# -------------------
 # ttest for this data
-# ----------
+# -------------------
 
-# need to filter data to new df's
+# Need to filter data to new df's.
 
 og_salamander <- salamander_weight %>% 
   filter(section %in% c("OG"))
@@ -377,6 +391,7 @@ og_salamander <- salamander_weight %>%
 cc_salamander <- salamander_weight %>% 
   filter(section %in% c("CC"))
 
+# Conducr ttests for salamander weights in old growth and clear cut areas.
 og_cc_ttest <- t.test(og_salamander$weight, 
                       cc_salamander$weight, 
                       na.rm = TRUE)
@@ -385,17 +400,17 @@ og_cc_cd <- effsize::cohen.d(og_salamander$weight,
                              cc_salamander$weight,
                              na.rm = TRUE)
 
-#standard deviation
+# Find standard deviations.
 
 sd_og <- sd(og_salamander$weight, na.rm = TRUE)
 sd_cc <- sd(cc_salamander$weight, na.rm = TRUE)
 
 
-#sample size
+# Find sample size.
 
 sample_og_cc <- sum(salamander_count$total, na.rm = TRUE)
 
-#mean
+# Find means.
 
 mean_og <- mean(og_salamander$weight, na.rm = TRUE)
 mean_cc <- mean(cc_salamander$weight, na.rm = TRUE)
@@ -406,9 +421,9 @@ mean_cc <- mean(cc_salamander$weight, na.rm = TRUE)
 ##### 4. Compared weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
 
 ```{r}
-# ----------
-# filter data for results E
-# ----------
+# --------------------------
+# Filter data for results E
+# --------------------------
 
 creek_area_weight <- salamander_df %>%  
   #Call out data and assign it to an object.
@@ -427,227 +442,134 @@ creek_area_weight <- salamander_df %>%
                                  ifelse(unittype == "P", "Pool", "Side-Channel")))
 # Compare weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
 
-# ---------
-# Find means for results E
-# ---------
-
-creek_area_weight_av <- creek_area_weight %>% 
+creek_area_summary <- creek_area_weight %>% 
   #Call out data and assign it to an object.
   #Pipe to move to the next step.
   group_by(unittype, year) %>%
   # Group receiving section and year by collapsing
   # multiple data points into a single row.
   # Pipe to move to the next step.
-  summarize(weight_av = mean(weight, na.rm = TRUE)) %>% 
+  summarize(weight_av = mean(weight, na.rm = TRUE),
+            weight_sd = sd(weight, na.rm = TRUE),
+            sample_size = n(),
+            weight_se = sd(weight, na.rm = TRUE) / sqrt(n())) %>% 
   # Summarize (new column = whatever you're doing(metric)).
   filter(year %in% c(2017)) %>% 
   mutate("creek_area" = ifelse(unittype == "C", "Cascade",
-                                 ifelse(unittype == "P",
-                                        "Pool",
-                                        "Side-Channel")))
+                               ifelse(unittype == "P", "Pool", "Side-Channel")))
 # Filter out the observations during the year 2017.
+
 ```
 
 ```{r, include=FALSE}
-# ---------
-# visually explore the means of data
-# ---------
+# -----------------------------------
+# Visually explore the means of data
+# -----------------------------------
 
+# Faceted histogram: 
 ggplot(data = creek_area_weight, aes(x = weight)) +
   geom_histogram() +
+# Create a graph and call out data to be used,
+# including what the x variable is.
   facet_wrap(~creek_area)
+# Compare graphs side by side.
 
 ggplot(data = creek_area_weight, aes(sample = weight)) +
   geom_qq() +
+# Create a graph and call out data to be used,
+# including what the x variable is.
   facet_wrap(~creek_area)
+# Compare graphs side by side.
 
-# samples are not normally distributed but we can assume that because of central limit theorem that the means of samples will be
+
+# Samples are not normally distributed but we can assume that because of central limit theorem that the means of samples will be.
 ```
 
 ```{r, fig.cap="Figure 6: ... Data: Andrews Forest LTER"}
 
-# ---------
-# Graph E
-# --------
+# ---------------
+# Create Graph E
+# ---------------
 
-ggplot(data = creek_area_weight, 
-       aes(x = creek_area, 
-           y = weight,
-           color = creek_area)) +
-  geom_jitter() +
-   scale_color_manual(breaks = c("Cascade", 
-                               "Pool",
-                               "Side-Channel"), 
-                    values = c("darkseagreen3", 
-                               "darkslategray",
-                               "lightsalmon")) +
-  # Specify colors for the points.
-  theme_minimal() +
-  # Call out a theme to tweak the display of an existing theme.
-  theme(legend.position = "none") 
-  # geom_point(data = creek_area_weight_av,
-  #            aes(x = weight_av,
-  #                y = creek_area))
-
-ggplot(data = creek_area_weight) +
-  geom_density(aes(x = weight,
-               # Create a graph and call out data to be used,
-               # including what the x variable is.
-               fill = as.character(creek_area),
-               color = as.character(creek_area)),
-               alpha = 0.3) +
-  # Using as.character allows me to group them by year.
-  scale_fill_manual(breaks = c("Cascade", 
-                               "Pool",
-                               "Side-Channel"), 
-                    values = c("darkseagreen3", 
-                               "darkslategray",
-                               "lightsalmon")) +
-  # Specify colors for the fill of the curves.
+ggplot() +
+  geom_jitter(data = creek_area_weight, 
+              aes(x = creek_area, 
+                  y = weight,
+# Create a graph and call out data to be used,
+# including what the x and y variables are.
+                  color = creek_area),
+# Color jitterplot by creek area.
+              alpha = 0.5) +
+# Adjust transparency.
   scale_color_manual(breaks = c("Cascade", 
                                 "Pool",
                                 "Side-Channel"), 
-                     values = c("darkseagreen3", 
-                                "darkslategray",
-                                "lightsalmon")) +
-  # Specify colors for the lines.
+                     values = c("darkturquoise", 
+                                "deepskyblue3",
+                                "cornflowerblue")) +
+# Specify colors for the points.
   theme_minimal() +
-  # Call out a theme to tweak the display of an existing theme.
-  theme(legend.position = "none") +  
-  # Don't want a legend, label manually.
-  annotate(
-    geom = "curve",
-    # Use geom="curve" for curved line, geom="segment" for straight.
-    x = 3.95,
-    # Line start.
-    y = 0.125,
-    # Line start.
-    xend = 14,
-    # Line end.
-    yend = 0.1155,
-    # Line end.
-    curvature = .2,
-    # Level of curve.
-    color = "lightsalmon") +
-  # Values entered manually for where I want lines to begin and end.
-  annotate(geom = "text",
-           x = 14.55,
-           # Where my text will be.
-           y = .115,
-           # Where my text will be.
-           label = "Side-Channel",
-           hjust = "left",
-           color = "lightsalmon") +
-  # Annotation for Side-Channel.
-  annotate(
-    geom = "curve",
-    # Use geom="curve" for curved line, geom="segment" for straight.
-    x = 12.5,
-    # Start of line.
-    y = 0.03,
-    # Start of line.
-    xend = 25,
-    # End of line.
-    yend = 0.045,
-    # End of line.
-    curvature = .2,
-    # Level of curve.
-    color = "darkseagreen3") +
-  # Values entered manually for where I want the lines to begin and end.
-  annotate(geom = "text",
-           x = 26,
-           # Where my label will sit.
-           y = 0.045,
-           # Where my label will sit.
-           label = "Cascade",
-           hjust = "left",
-           color = "darkseagreen3") +
-  # Annotation for Channel.
-  annotate(
-    geom = "curve",
-    # Use geom="curve" for curved line, geom="segment" for straight.
-    x = 18,
-    # Start of line.
-    y = 0.015,
-    # Start of line.
-    xend = 30,
-    # End of line.
-    yend = 0.025,
-    # End of line.
-    curvature = .2,
-    # Level of curve.
-    color = "darkslategray") +
-  # Values entered manually for where I want the lines to begin and end.
-  annotate(geom = "text",
-           x = 31,
-           # Where my label will sit.
-           y = 0.0255,
-           # Where my label will sit.
-           label = "Pool",
-           hjust = "left",
-           color = "darkslategray") +
-  geom_vline(xintercept = 7.520850,
-             color = "darkseagreen3",
-             linetype = "dashed",
-             size = 0.5) +
-  geom_vline(xintercept = 9.297500,
-             color = "darkslategray",
-             linetype = "dashed",
-             size = 0.5) +
-  geom_vline(xintercept = 5.676646,
-             color = "lightsalmon",
-             linetype = "dashed",
-             size = 0.5) +
-  # Means taken from lobster_size_av dataframe.
-  # Using vline allows me to draw a vertical line of the mean.
-  labs(x = "Salamander weight (grams)",
-       y = "Kernel density")
-  # Create labels for the x and y axes and title.
-  # Create caption below the graph and edit font size and style.
+# Call out a theme to tweak the display of an existing theme.
+  theme(legend.position = "none") +
+  geom_point(data = creek_area_summary,
+           aes(x = creek_area,
+               y = weight_av),
+           color = "black",
+           size = 2) +
+  labs(x = "Creek area",
+       y = "Weight (grams)") +
+# Add salamander weight average points and adjust color and size.
+  geom_errorbar(data = creek_area_summary,
+                aes(x = creek_area,
+                    ymin = weight_av - weight_av, 
+# minus weight_av because weight can't be below zero.
+                    ymax = weight_av + weight_sd),
+                width = 0.15, 
+                color = "black") 
+# Error bar width and color adjustment.
 
 ```
 
 ```{r, include=FALSE}
-# -----------
-# statistical Analysis for results E
-# -----------
+# -----------------------------------
+# Statistical Analysis for results E
+# -----------------------------------
 
-#need to test for equal variance because ANOVA only works if group variance in the largest is only 4x greater than the smallest
+# Need to test for equal variance because ANOVA only works if group variance in the largest # is only 4x greater than the smallest.
 
-#levene's test
+# levene's test
 
 # H0: Group variances are equal
 # HA: Group variances are not equal
 
-# salamander_var <- leveneTest(weight ~ creek_area, data = creek_area_weight)
+# Salamander_var <- leveneTest(weight ~ creek_area, data = creek_area_weight).
 
-# retain null - variances are equal, can do ANOVA
+# Retain null - variances are equal, can do ANOVA.
 
 salamander_aov <- aov(weight ~ creek_area, data = creek_area_weight)
 
 summary(salamander_aov)
 
-# p = 0.007, there is a significant difference between at least 2 of the creek areas
-# tukey's HSD for post-hoc
+# p = 0.007, there is a significant difference between at least 2 of the creek areas.
+# Uae tukey's HSD for post-hoc.
 
 salamander_post_hoc <- TukeyHSD(salamander_aov)
 salamander_post_hoc
 
-# side-channel and channel (p = 0.05), side-channel and pool (p = 0.01) have signifcant differences, pool and channel don't (p=0.28)
+# Side-channel and channel (p = 0.05), side-channel and pool (p = 0.01) have signifcant differences, pool and channel don't (p=0.28).
 
 ```
 
 #### Summary
 
-- Bullet points
--
--
--
+- Graph A findings + table B findings
+- Graph C findings
+- Graph E findings
 
 #### References
 
 **Gregory S. V. 2016.** Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest, 1987 to present. Environmental Data Initiative. https://doi.org/10.6073/pasta/5de64af9c11579266ef20da2ff32f702. Dataset accessed 11/19/2019.
 
-“Andrews Forest Data Web Site.” Andrews Forest, andlter.forestry.oregonstate.edu/data/abstractdetail.aspx?dbcode=AS006.
+**“Andrews Forest Data Web Site.”** Andrews Forest, andlter.forestry.oregonstate.edu/data/abstractdetail.aspx?dbcode=AS006.
 
-“Pacific Giant Salamander: Oregon Wild.” Pacific Giant Salamander | Oregon Wild, oregonwild.org/wildlife/pacific-giant-salamander.
+**“Pacific Giant Salamander: Oregon Wild.”** Pacific Giant Salamander | Oregon Wild, oregonwild.org/wildlife/pacific-giant-salamander.
