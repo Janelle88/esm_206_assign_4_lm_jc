@@ -148,6 +148,8 @@ channel_class_df <- salamander_df %>%
 # Filter data for only Clear Cut and Old Growth.
   filter(unittype %in% c("C", "SC", "P")) %>%
 # Filter for only pools, side channels and channel.
+  filter(year %in% c(2017)) %>% 
+  # Filter for only 2017
   mutate("creek_area" = ifelse(unittype == "C", "Cascade",
                         ifelse(unittype == "SC", "Side-Channel", "Pool"))) %>%
 # Make names nicer for table.
@@ -206,11 +208,12 @@ channel_class_chi <- chisq.test(channel_class_table_chi)
 # Create chi sq. test.
 
 p_val_chi <- ifelse(channel_class_chi$p.value < .001, "< 0.001" , channel_class_chi$p.value)
+
 # Use ifelse to show p values lower than .001.
 
 ```
 
-Based on these results, there is an observed association between where salamanders are found depending on whether or not they are in a clear cut or old growth section of Mack Creek (p `r p_val_chi`)
+Based on these results, there is no observed association between where salamanders are found depending on whether or not they are in a clear cut or old growth section of Mack Creek (p = `r round(p_val_chi, 2)`)
 
 
 ##### 3. Compared weights of Pacific giant salamanders in clear cut and old growth forest sections of Mack creek in 2017.
@@ -417,6 +420,7 @@ mean_cc <- mean(cc_salamander$weight, na.rm = TRUE)
 
 ```
 
+For salamanders observed in the two types of forest in Mack Creek (n = `r sample_og_cc`), for old growth sections the mean weight of salamanders is `r round(mean_og, 2)` $\pm$ `r round(sd_og, 2)` and for clear cut sections the mean weight of salamanders is `r round(mean_cc, 2)` $\pm$ `r round(sd_cc, 2)` with an actual difference in mean size between the two years being `r round(mean_og - mean_cc, 2)` (two-sided t-test, t(`r round(og_cc_ttest$parameter, 2)`) = `r round(og_cc_ttest$statistic, 2)`, p = `r round(og_cc_ttest$p.value, 2)`) with an effect size of `r round(og_cc_cd$estimate, 2)`. This indicates that there is no significant difference in weights of Salamanders observed between the two types of forest.
 
 ##### 4. Compared weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
 
@@ -537,28 +541,87 @@ ggplot() +
 
 # Need to test for equal variance because ANOVA only works if group variance in the largest # is only 4x greater than the smallest.
 
+# ---------
 # levene's test
+# ---------
 
 # H0: Group variances are equal
 # HA: Group variances are not equal
 
-# Salamander_var <- leveneTest(weight ~ creek_area, data = creek_area_weight).
+#Salamander_var <- leveneTest(weight ~ creek_area, data = creek_area_weight).
 
 # Retain null - variances are equal, can do ANOVA.
 
+# --------
+# ANOVA
+# --------
+
 salamander_aov <- aov(weight ~ creek_area, data = creek_area_weight)
 
-summary(salamander_aov)
+salamander_aov_summary <- unlist(summary(salamander_aov))
 
 # p = 0.007, there is a significant difference between at least 2 of the creek areas.
 # Uae tukey's HSD for post-hoc.
 
+# --------
+# Tukey's HSD for post hoc
+# --------
+
+
 salamander_post_hoc <- TukeyHSD(salamander_aov)
 salamander_post_hoc
 
-# Side-channel and channel (p = 0.05), side-channel and pool (p = 0.01) have signifcant differences, pool and channel don't (p=0.28).
+# Side-channel and cascade (p = 0.05), side-channel and pool (p = 0.01) have signifcant differences, pool and channel don't (p=0.28).
+
+# -------
+# Cohen's D for effect size
+# -------
+
+sc_weight <- creek_area_weight %>% 
+  filter(unittype %in% c("SC"))
+
+c_weight <- creek_area_weight %>% 
+  filter(unittype %in% c("C"))
+
+p_weight <- creek_area_weight %>% 
+  filter(unittype %in% c("P"))
+
+cd_sc_c <- effsize::cohen.d(sc_weight$weight, c_weight$weight, na.rm = TRUE)
+
+cd_sc_p <- effsize::cohen.d(sc_weight$weight, p_weight$weight, na.rm = TRUE)
+
+# ---------
+# Summary statsitics
+# ---------
+
+# filter data frames
+
+c_salamander <- creek_area_weight %>% 
+  filter(unittype %in% c("C"))
+
+p_salamander <- creek_area_weight %>% 
+  filter(unittype %in% c("P"))
+
+sc_salamander <- creek_area_weight %>% 
+  filter(unittype %in% c("SC"))
+
+#standard deviation
+
+sd_c <- sd(c_salamander$weight, na.rm = TRUE)
+sd_p <- sd(p_salamander$weight, na.rm = TRUE)
+sd_sc <- sd(sc_salamander$weight, na.rm = TRUE)
+
+
+#mean
+
+mean_c <- mean(c_salamander$weight, na.rm = TRUE)
+mean_p <- mean(p_salamander$weight, na.rm = TRUE)
+mean_sc <- mean(sc_salamander$weight, na.rm = TRUE)
+
 
 ```
+
+For salamanders in Mack Creek (n = `r sample_og_cc`), for salamanders found in cascades, the mean weight of salamanders was `r round(mean_c, 2)` $\pm$ `r round(sd_c, 2)`, for salamanders found in pools the mean weight of salamanders is `r round(mean_p, 2)` $\pm$ `r round(sd_p, 2)`, and for side-channels the mean weight of salamanders was `r round(mean_sc, 2)` $\pm$ `r round(sd_sc, 2)` (one-way ANOVA F(`r salamander_aov_summary[1]`, `rsalamander_aov_summary[2]`)
 
 #### Summary
 
