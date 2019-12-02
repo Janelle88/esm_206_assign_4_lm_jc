@@ -411,10 +411,11 @@ og_cc_cd <- effsize::cohen.d(og_salamander$weight,
 sd_og <- sd(og_salamander$weight, na.rm = TRUE)
 sd_cc <- sd(cc_salamander$weight, na.rm = TRUE)
 
-
+salamander_2017 <- salamander_count %>% 
+  filter(year %in% c(2017))
 # Find sample size.
 
-sample_og_cc <- sum(salamander_count$total, na.rm = TRUE)
+sample_og_cc <- sum(salamander_2017$total, na.rm = TRUE)
 
 # Find means.
 
@@ -591,7 +592,7 @@ p_weight <- creek_area_weight %>%
 
 cd_sc_c <- effsize::cohen.d(sc_weight$weight, c_weight$weight, na.rm = TRUE)
 
-cd_sc_p <- effsize::cohen.d(sc_weight$weight, p_weight$weight, na.rm = TRUE)
+cd_sc_p <- effsize::cohen.d(p_weight$weight, sc_weight$weight, na.rm = TRUE)
 
 # ---------
 # Summary statsitics
@@ -624,7 +625,9 @@ mean_sc <- mean(sc_salamander$weight, na.rm = TRUE)
 
 ```
 
-For salamanders in Mack Creek (n = `r sample_og_cc`), for salamanders found in cascades, the mean weight of salamanders was `r round(mean_c, 2)` $\pm$ `r round(sd_c, 2)`, for salamanders found in pools the mean weight of salamanders is `r round(mean_p, 2)` $\pm$ `r round(sd_p, 2)`, and for side-channels the mean weight of salamanders was `r round(mean_sc, 2)` $\pm$ `r round(sd_sc, 2)` (one-way ANOVA F(`r salamander_aov_summary[1]`, `rsalamander_aov_summary[2]`)
+In Mack Creek (n = `r sample_og_cc`), the mean weight for salamanders found in cascades was `r round(mean_c, 2)` $\pm$ `r round(sd_c, 2)`, in pools the mean weight of salamanders was `r round(mean_p, 2)` $\pm$ `r round(sd_p, 2)`, and for side-channels the mean weight of salamanders was `r round(mean_sc, 2)` $\pm$ `r round(sd_sc, 2)` (one-way ANOVA, `r salamander_aov_summary[2]`) = `r round(salamander_aov_summary[7], 2)`, p-value = `r round(salamander_aov_summary[9], 3)`).
+Using Tukey’s HSD, the post hoc pairwise testing shows that the mean weights of salamanders in pools differ significantly from salamanders in side-channels(p-value = `r round(salamander_post_hoc$creek_area[12], 3)`). The significant difference in mean weight between salamanders is only seen between salamanders in pools and side-channels. Despite the significant difference, the effect size is relatively small (`r round(cd_sc_p$estimate, 2)`).  Between salamanders in pools and cascades, there is no observed significant difference in means (p-value = `r round(salamander_post_hoc$creek_area[10], 3)`). Similarly, there is no observed significant difference for salamanders in side-channels and in cascades: (p-value = `r round(salamander_post_hoc$creek_area[11], 3)`).
+
 
 #### Summary
 
