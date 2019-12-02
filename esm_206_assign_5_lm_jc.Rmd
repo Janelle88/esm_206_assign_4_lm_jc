@@ -52,16 +52,19 @@ Andrews Forest Long Term Ecological Reasearch has been using 2-pass electrofishi
 
 
 
-Figure 1. Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest
-![Aquatic Vertebrate Population Study in Mack Creek](map.jpg)
+Figure 1. Andrews Forest Long Term Ecological Research
+
+![](map.jpg)
 
 Credit: [EDI Data Portal](https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-and&identifier=4027&revision=12)
 
 
 Figure 2. Pacific Giant Salamander
-![Pacific Giant Salamander](pacificgiantsalamader.jpg)
+
+![](pacificgiantsalamader.jpg)
 
 Credit: [Jeffrey Marsten Wikimedia](https://commons.wikimedia.org/wiki/File:Dicamptodon_tenebrosus_2.JPG)
+
 
 ### Data and Methods
 
@@ -71,7 +74,7 @@ Data for this project was collected from 1987 to present day by the Andrews Fore
 
 ##### 1. Observed annual salamander counts in old growth and clear cut sections of Mack Creek
 
-In the two creek areas, annual salamander counts followed a similar trend.
+In the two creek areas, annual salamander counts followed a similar trend. However, there is no significant difference in salamander counts between the two sections of Mack Creek observed from 1993 to 2017.
 
 ```{r}
 # --------------------
@@ -213,7 +216,7 @@ p_val_chi <- ifelse(channel_class_chi$p.value < .001, "< 0.001" , channel_class_
 
 ```
 
-Based on these results, there is no observed association between where salamanders are found depending on whether or not they are in a clear cut or old growth section of Mack Creek (p = `r round(p_val_chi, 2)`)
+Based on these results, there is no observed association between where salamanders are found depending on whether or not they are in a clear cut or old growth section of Mack Creek (p = `r round(p_val_chi, 2)`).
 
 
 ##### 3. Compared weights of Pacific giant salamanders in clear cut and old growth forest sections of Mack creek in 2017.
@@ -394,7 +397,7 @@ og_salamander <- salamander_weight %>%
 cc_salamander <- salamander_weight %>% 
   filter(section %in% c("CC"))
 
-# Conducr ttests for salamander weights in old growth and clear cut areas.
+# Conduct ttests for salamander weights in old growth and clear cut areas.
 og_cc_ttest <- t.test(og_salamander$weight, 
                       cc_salamander$weight, 
                       na.rm = TRUE)
@@ -489,7 +492,7 @@ ggplot(data = creek_area_weight, aes(sample = weight)) +
 # Samples are not normally distributed but we can assume that because of central limit theorem that the means of samples will be.
 ```
 
-```{r, fig.cap="Figure 6: ... Data: Andrews Forest LTER"}
+```{r, fig.cap="Figure 6: Salamander weights observed in pool (sky blue), cascade (turquoise), and side-channel (cornflower blue) areas in the overall two sections (old growth and clear cut) of Mack Creek in 2017. Mean salamandar weights are highlighted as the black points of the graph with the brackets extending to the standard errors of the mean. Data: Andrews Forest LTER"}
 
 # ---------------
 # Create Graph E
@@ -625,9 +628,11 @@ For salamanders in Mack Creek (n = `r sample_og_cc`), for salamanders found in c
 
 #### Summary
 
-- Graph A findings + table B findings
-- Graph C findings
-- Graph E findings
+- There is no significant difference in salamander counts between the two overall sections of Mack Creek (old growth and clear cut) from 1993 to 2017 (Figure 3).
+- There is no association between salamander counts and the two sections of Mack Creek and their three sub-region areas (cascade, pool, and side-channel) in 2017 (Figure 4).
+- There is no association and not a significant difference in salamander weights overall in old growth and clear cut areas of Mack Creek in 2017 (Figure 5).
+- There is an association between salamander weight and the specific areas of the two sections of Mack Creek. There is a significant difference in salamander weight in cascade, pool, and side-channel areas between old growth and clear cut sections in 2017 (Figure 6).
+
 
 #### References
 
