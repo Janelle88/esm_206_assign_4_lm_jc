@@ -46,13 +46,13 @@ salamander_df <- read_csv("mack_creek_vertebrates.csv") %>%
 
 The pacific giant salamanders (*dicamptodon tenebrosus*) are a native species and the largest amphibians known in Oregon. Observing these species can give a clear signal on whether their water habitat is healthy as they are sensitive to water quality and are the first animals to react to negative impacts on their aquatic environment.
 
-Since 1987 to present day, the Andrews Forest Long Term Ecological Research (Andrews Forest LTER) has been observing pacific giant salamanders as part of an aquatic vertebrate population study. The overall purpose of the study has been to observe the impacts of land use on the aquatic vertebrates. The research team conducted their work in Mack Creek located in the Andrews Experimental Forest in Oregon. The research team has been focusing on two specific areas of the creek; an upstream 500 year old coniferous forest and a clearcut forest.
+Since 1987 to present day, the Andrews Forest Long Term Ecological Research (Andrews Forest LTER) has been observing pacific giant salamanders as part of an aquatic vertebrate population study. The overall purpose of the study has been to observe the impacts of land use on the aquatic vertebrates. The research team conducted their work in Mack Creek located in the Andrews Experimental Forest in Oregon. The research team has been focusing on two specific areas of the creek: an upstream 500 year old coniferous forest and a clearcut forest.
 
 Andrews Forest Long Term Ecological Reasearch has been using 2-pass electrofishing to capture specimen from the two regions of Mack Creek and measure and weigh each one for their records.
 
 
 
-Figure 1. Andrews Forest Long Term Ecological Research
+Figure 1. Andrews Forest Long Term Ecological Research Area
 
 ![](map.jpg)
 
@@ -74,7 +74,7 @@ Data for this project was collected from 1987 to present day by the Andrews Fore
 
 ##### 1. Observed annual salamander counts in old growth and clear cut sections of Mack Creek
 
-In the two creek areas, annual salamander counts followed a similar trend. However, there is no significant difference in salamander counts between the two sections of Mack Creek observed from 1993 to 2017.
+In the two creek areas, annual salamander counts followed a similar trend. In 2017, there were 40 more salamanders in the clear cut area than in the old growth one.
 
 ```{r}
 # --------------------
@@ -138,7 +138,7 @@ ggplot(data = salamander_count, aes(x = year, y = total, group = section)) +
 ```
 
 
-##### 2. Table of 2017 salamander counts by channel classification (pool, cascades and side-channel) in old growth (OG) and clear cut (CC) sections of Mack Creek.
+##### 2. Table of 2017 salamander counts by channel classification (pool, cascades and side-channel) in old growth and clear cut sections of Mack Creek.
 
 Figure 4. Numbers of salamanders observed in cascades, pools and side-channels in clear cut and old growth forest sections along Mack Creek. Percentages are relative to the area of the creek. 
 ```{r}
@@ -187,9 +187,6 @@ channel_class_table_props %>%
 # Header number has to match number of columns.
 
 ```
-
-##FIX THIS
-In comparing between the two types of sections, it shows that a higher proportion of Salamanders are found in pools in the Old Growth sections compared to clear cut. 
 
 ```{r}
 # ------------
@@ -241,7 +238,7 @@ salamander_weight <- salamander_df %>%
 # Select specific columns to keep in the data frame.
   mutate("section_name" = ifelse(section == "OG", "old growth",
                               ifelse(section == "CC", "clear cut")))
-#Create a new column containing non-abbreviated section names.
+# Create a new column containing non-abbreviated section names.
 
 salamander_weight_av <- salamander_weight %>% 
 #Call out data and assign it to an object.
@@ -592,9 +589,11 @@ c_weight <- creek_area_weight %>%
 p_weight <- creek_area_weight %>% 
   filter(unittype %in% c("P"))
 
-cd_sc_c <- effsize::cohen.d(sc_weight$weight, c_weight$weight, na.rm = TRUE)
+cd_sc_c <- effsize::cohen.d(c_weight$weight, sc_weight$weight, na.rm = TRUE)
 
 cd_sc_p <- effsize::cohen.d(p_weight$weight, sc_weight$weight, na.rm = TRUE)
+
+cd_c_p <- effsize::cohen.d(p_weight$weight, c_weight$weight, na.rm = TRUE)
 
 # ---------
 # Summary statsitics
@@ -627,8 +626,8 @@ mean_sc <- mean(sc_salamander$weight, na.rm = TRUE)
 
 ```
 
-In Mack Creek in 2017 (n = `r sample_og_cc`), the mean weight for salamanders found in cascades was `r round(mean_c, 2)` $\pm$ `r round(sd_c, 2)`, in pools the mean weight of salamanders was `r round(mean_p, 2)` $\pm$ `r round(sd_p, 2)`, and for side-channels the mean weight of salamanders was `r round(mean_sc, 2)` $\pm$ `r round(sd_sc, 2)` (one-way ANOVA, F (`r salamander_aov_summary[2]`) = `r round(salamander_aov_summary[7], 2)`, p = `r round(salamander_aov_summary[9], 3)`).
-Using Tukey’s HSD, the post hoc pairwise testing shows that the mean weights of salamanders in pools differ significantly from salamanders in side-channels (p = `r round(salamander_post_hoc$creek_area[12], 3)`). The significant difference in mean weight between salamanders is only seen between salamanders in pools and side-channels. Despite this, the effect size is relatively small (`r round(cd_sc_p$estimate, 2)`).  Between salamanders in pools and cascades, there is no observed significant difference in means (p = `r round(salamander_post_hoc$creek_area[10], 3)`). Similarly, there is no observed significant difference for salamanders in side-channels and in cascades: (p = `r round(salamander_post_hoc$creek_area[11], 3)`).
+In Mack Creek in 2017 (n = `r sample_og_cc`), the mean weight for salamanders found in cascades was `r round(mean_c, 2)` $\pm$ `r round(sd_c, 2)`, in pools the mean weight of salamanders was `r round(mean_p, 2)` $\pm$ `r round(sd_p, 2)`, and for side-channels the mean weight of salamanders was `r round(mean_sc, 2)` $\pm$ `r round(sd_sc, 2)` (one-way ANOVA, F (`r salamander_aov_summary[2]`) = `r round(salamander_aov_summary[7], 2)`, p = `r round(salamander_aov_summary[9], 2)`).
+Using Tukey’s HSD, the post hoc pairwise testing shows that the mean weights of salamanders in pools differ significantly from salamanders in side-channels (p = `r round(salamander_post_hoc$creek_area[12], 2)`). The significant difference in mean weight between salamanders is only seen between salamanders in pools and side-channels. Despite this, the effect size is relatively small (`r round(cd_sc_p$estimate, 2)`).  Between salamanders in pools and cascades, there is no observed significant difference in means (p = `r round(salamander_post_hoc$creek_area[10], 2)`) with an effect size of `r round(cd_c_p$estimate, 2)`. Similarly, there is no observed significant difference for salamanders in side-channels and in cascades: (p = `r round(salamander_post_hoc$creek_area[11], 2)`) with an effect size of `r round(cd_sc_c$estimate, 2)`.
 
 Despite the ANOVA being a strong test for statistical significance, comparing means of these samples may not be the most appropriate due to the positive skew and abonormal data distribution for all samples. For these samples, it might be best to compare medians, as medians are typically a stronger comparison for data that is positively skewed.
 
@@ -638,7 +637,7 @@ Despite the ANOVA being a strong test for statistical significance, comparing me
 - There is no significant difference in salamander counts between the two overall sections of Mack Creek (old growth and clear cut) from 1993 to 2017 (Figure 3).
 - There is no association between salamander counts and the two sections of Mack Creek and their three sub-region areas (cascade, pool, and side-channel) in 2017 (Figure 4).
 - There is no association and not a significant difference in salamander weights overall in old growth and clear cut areas of Mack Creek in 2017 (Figure 5).
-- There is an association between salamander weight and the specific areas of the two sections of Mack Creek. There is a significant difference in salamander weight in cascade, pool, and side-channel areas between old growth and clear cut sections in 2017 (Figure 6).
+- There is a significant difference in salamander weights between side-channel areas and pools, but none observed when comparing between pools and cascades as well as cascades and side-channels in 2017 (Figure 6).
 
 
 #### References
