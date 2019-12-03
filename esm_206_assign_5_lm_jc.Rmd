@@ -188,6 +188,8 @@ channel_class_table_props %>%
 
 ```
 
+##FIX THIS
+In comparing between the two types of sections, it shows that a higher proportion of Salamanders are found in pools in the Old Growth sections compared to clear cut. 
 
 ```{r}
 # ------------
@@ -216,7 +218,7 @@ p_val_chi <- ifelse(channel_class_chi$p.value < .001, "< 0.001" , channel_class_
 
 ```
 
-Based on these results, there is no observed association between where salamanders are found depending on whether or not they are in a clear cut or old growth section of Mack Creek (p = `r round(p_val_chi, 2)`).
+Based on these results, there is no observed association between where salamanders are found depending on whether or not they are in a clear cut or old growth section of Mack Creek ($\chi^2$ (`r channel_class_chi$parameter`) = `r round(channel_class_chi$statistic, 2)`, p = `r round(p_val_chi, 2)`) with a 95% confidence interval.
 
 
 ##### 3. Compared weights of Pacific giant salamanders in clear cut and old growth forest sections of Mack creek in 2017.
@@ -398,12 +400,12 @@ cc_salamander <- salamander_weight %>%
   filter(section %in% c("CC"))
 
 # Conduct ttests for salamander weights in old growth and clear cut areas.
-og_cc_ttest <- t.test(og_salamander$weight, 
-                      cc_salamander$weight, 
+og_cc_ttest <- t.test(cc_salamander$weight,
+                      og_salamander$weight,
                       na.rm = TRUE)
 
-og_cc_cd <- effsize::cohen.d(og_salamander$weight, 
-                             cc_salamander$weight,
+og_cc_cd <- effsize::cohen.d(cc_salamander$weight,
+                             og_salamander$weight, 
                              na.rm = TRUE)
 
 # Find standard deviations.
@@ -424,7 +426,7 @@ mean_cc <- mean(cc_salamander$weight, na.rm = TRUE)
 
 ```
 
-For salamanders observed in the two types of forest in Mack Creek (n = `r sample_og_cc`), for old growth sections the mean weight of salamanders is `r round(mean_og, 2)` $\pm$ `r round(sd_og, 2)` and for clear cut sections the mean weight of salamanders is `r round(mean_cc, 2)` $\pm$ `r round(sd_cc, 2)` with an actual difference in mean size between the two years being `r round(mean_og - mean_cc, 2)` (two-sided t-test, t(`r round(og_cc_ttest$parameter, 2)`) = `r round(og_cc_ttest$statistic, 2)`, p = `r round(og_cc_ttest$p.value, 2)`) with an effect size of `r round(og_cc_cd$estimate, 2)`. With a 95% confidence interval,this indicates that there is no significant difference in weights of Salamanders observed between the two types of forest.
+For salamanders observed in the two types of forest in Mack Creek (n = `r sample_og_cc`), for old growth sections the mean weight of salamanders is `r round(mean_og, 2)` $\pm$ `r round(sd_og, 2)` and for clear cut sections the mean weight of salamanders is `r round(mean_cc, 2)` $\pm$ `r round(sd_cc, 2)` with an actual difference in mean size between the two setions being `r round( mean_cc - mean_og, 2)` (two-sided t-test, t (`r round(og_cc_ttest$parameter, 2)`) = `r round(og_cc_ttest$statistic, 2)`, p = `r round(og_cc_ttest$p.value, 2)`) with an effect size of `r round(og_cc_cd$estimate, 2)`. This indicates that there is no significant difference in weights of Salamanders observed between the two types of forest with a 95% confidence interval.
 
 ##### 4. Compared weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
 
@@ -625,8 +627,8 @@ mean_sc <- mean(sc_salamander$weight, na.rm = TRUE)
 
 ```
 
-In Mack Creek in 2017 (n = `r sample_og_cc`), the mean weight for salamanders found in cascades was `r round(mean_c, 2)` $\pm$ `r round(sd_c, 2)`, in pools the mean weight of salamanders was `r round(mean_p, 2)` $\pm$ `r round(sd_p, 2)`, and for side-channels the mean weight of salamanders was `r round(mean_sc, 2)` $\pm$ `r round(sd_sc, 2)` (one-way ANOVA, `r salamander_aov_summary[2]`) = `r round(salamander_aov_summary[7], 2)`, p-value = `r round(salamander_aov_summary[9], 3)`).
-Using Tukey’s HSD, the post hoc pairwise testing shows that the mean weights of salamanders in pools differ significantly from salamanders in side-channels(p-value = `r round(salamander_post_hoc$creek_area[12], 3)`). The significant difference in mean weight between salamanders is only seen between salamanders in pools and side-channels. Despite the significant difference, the effect size is relatively small (`r round(cd_sc_p$estimate, 2)`).  Between salamanders in pools and cascades, there is no observed significant difference in means (p-value = `r round(salamander_post_hoc$creek_area[10], 3)`). Similarly, there is no observed significant difference for salamanders in side-channels and in cascades: (p-value = `r round(salamander_post_hoc$creek_area[11], 3)`).
+In Mack Creek in 2017 (n = `r sample_og_cc`), the mean weight for salamanders found in cascades was `r round(mean_c, 2)` $\pm$ `r round(sd_c, 2)`, in pools the mean weight of salamanders was `r round(mean_p, 2)` $\pm$ `r round(sd_p, 2)`, and for side-channels the mean weight of salamanders was `r round(mean_sc, 2)` $\pm$ `r round(sd_sc, 2)` (one-way ANOVA, F (`r salamander_aov_summary[2]`) = `r round(salamander_aov_summary[7], 2)`, p = `r round(salamander_aov_summary[9], 3)`).
+Using Tukey’s HSD, the post hoc pairwise testing shows that the mean weights of salamanders in pools differ significantly from salamanders in side-channels (p = `r round(salamander_post_hoc$creek_area[12], 3)`). The significant difference in mean weight between salamanders is only seen between salamanders in pools and side-channels. Despite this, the effect size is relatively small (`r round(cd_sc_p$estimate, 2)`).  Between salamanders in pools and cascades, there is no observed significant difference in means (p = `r round(salamander_post_hoc$creek_area[10], 3)`). Similarly, there is no observed significant difference for salamanders in side-channels and in cascades: (p = `r round(salamander_post_hoc$creek_area[11], 3)`).
 
 Despite the ANOVA being a strong test for statistical significance, comparing means of these samples may not be the most appropriate due to the positive skew and abonormal data distribution for all samples. For these samples, it might be best to compare medians, as medians are typically a stronger comparison for data that is positively skewed.
 
